@@ -1,0 +1,5 @@
+{
+  "name": "Officer Directory",
+  "description": "A responsive dashboard to view and search officer records from a Google Sheet.",
+  "requestFramePermissions": []
+}

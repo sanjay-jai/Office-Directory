@@ -27,6 +27,13 @@ interface Officer {
 const FST_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1vvE_PB_zGDBslHw29xvLVQWGQBUmuDZG/export?format=csv';
 const RO_ARO_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1BBVN-aKbNeh9wMAekRR67WXoQNc_t-ZZ/export?format=csv';
 
+const getWhatsAppUrl = (mobile: string) => {
+  const cleaned = mobile.replace(/\D/g, '');
+  // Default to 91 prefix if it's a 10-digit number
+  const phone = cleaned.length === 10 ? `91${cleaned}` : cleaned;
+  return `https://wa.me/${phone}`;
+};
+
 export default function App() {
   const [officers, setOfficers] = useState<Officer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -174,7 +181,7 @@ export default function App() {
                 size="sm" 
                 onClick={handleRefresh}
                 disabled={isRefreshing}
-                className="rounded-full bg-white/50 border-slate-200 hover:bg-white transition-all shadow-sm"
+                className="rounded-full bg-white/50 border-slate-200 hover:border-purple-200 hover:text-purple-600 transition-all shadow-sm"
               >
                 <RefreshCw className={cn("h-4 w-4 mr-2", isRefreshing && "animate-spin")} />
                 Refresh Data
@@ -305,16 +312,34 @@ export default function App() {
                               )}
                             </div>
                             
-                            <a 
-                              href={`tel:${officer.mobile}`}
-                              className={cn(
-                                buttonVariants({ variant: "default" }),
-                                "w-full h-12 rounded-2xl text-white shadow-lg transition-all duration-300 active:scale-[0.98] font-bold flex items-center justify-center bg-slate-900 hover:brand-gradient hover:shadow-purple-200"
-                              )}
-                            >
-                              <Phone className="mr-2 h-4 w-4" />
-                              Direct Call
-                            </a>
+                            <div className="flex gap-3">
+                              <a 
+                                href={`tel:${officer.mobile}`}
+                                className={cn(
+                                  buttonVariants({ variant: "default" }),
+                                  "flex-1 h-12 rounded-2xl text-white shadow-lg transition-all duration-300 active:scale-[0.98] font-bold flex items-center justify-center bg-slate-900 hover:brand-gradient hover:shadow-purple-200"
+                                )}
+                              >
+                                <Phone className="mr-2 h-4 w-4" />
+                                Call
+                              </a>
+                              <a 
+                                href={getWhatsAppUrl(officer.mobile)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={cn(
+                                  buttonVariants({ variant: "outline" }),
+                                  "w-14 h-12 rounded-2xl border-2 border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white transition-all duration-300 active:scale-[0.98] flex items-center justify-center shadow-sm shrink-0"
+                                )}
+                              >
+                                <img 
+                                  src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" 
+                                  alt="WhatsApp" 
+                                  className="h-6 w-6" 
+                                  referrerPolicy="no-referrer"
+                                />
+                              </a>
+                            </div>
                           </CardContent>
                         </Card>
                       </motion.div>
